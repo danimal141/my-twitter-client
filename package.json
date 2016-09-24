@@ -1,0 +1,23 @@
+{
+  "name": "twitter-client-sample",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "danimal141",
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-register": "^6.14.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "twit": "^2.2.5"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.4.1"
+  }
+}
