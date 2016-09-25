@@ -13,10 +13,37 @@ export default class App extends React.Component {
     return(
       <div className='window'>
         <div id='window-content' className='window-content'>
-          Render from react.
         </div>
       </div>
     );
+  }
+
+  componentDidMount() {
+    T.get('statuses/home_timeline')
+      .catch(err => {
+        console.log(err.stack);
+      })
+      .then(result => {
+        if (result.data.errors) {
+          console.log(result.data.errors);
+          return;
+        }
+        this.setState({ tweets: result.data });
+        this.connectStream();
+      });
+  }
+
+  connectStream() {
+    const stream = T.stream('user');
+
+    stream.on('error', (error) => {
+      throw error;
+    });
+    stream.on('tweet', (tweet) => {
+      const tweets = this.state.tweets;
+      const newTweets = [tweet].concat(tweets);
+      this.setState({ tweets: newTweets });
+    });
   }
 }
 
