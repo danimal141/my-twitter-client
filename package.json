@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "electron .",
+    "start": "gulp serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "danimal141",
@@ -19,6 +19,8 @@
     "twit": "^2.2.5"
   },
   "devDependencies": {
-    "electron-prebuilt": "^1.4.1"
+    "electron-connect": "^0.6.0",
+    "electron-prebuilt": "^1.4.1",
+    "gulp": "^3.9.1"
   }
 }

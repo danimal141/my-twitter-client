@@ -7,6 +7,10 @@ export default class TimelineWindow {
   }
 
   start() {
+    app.on('window-all-closed', () => {
+      app.quit();
+    });
+
     app.on('ready', () => {
       this.createWindow();
     });
