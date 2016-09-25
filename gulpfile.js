@@ -4,8 +4,8 @@ const electron = require('electron-connect').server.create();
 gulp.task('serve', () => {
  electron.start();
 
- gulp.watch('./app/javascripts/main/**/*.js', electron.restart);
- gulp.watch(['./app/html/**/*.html', './app/css/**/*.css', './app/javascripts/**/*.{js,jsx}'], electron.reload);
+ gulp.watch('./src/javascripts/main/**/*.js', electron.restart);
+ gulp.watch(['./src/html/**/*.html', './src/css/**/*.css', './src/javascripts/**/*.{js,jsx}'], electron.reload);
 });
 
 gulp.task('default', ['serve']);
