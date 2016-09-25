@@ -13,6 +13,7 @@ export default class App extends React.Component {
     return(
       <div className='window'>
         <div id='window-content' className='window-content'>
+          <Timeline tweets={this.state.tweets} />
         </div>
       </div>
     );
@@ -47,5 +48,4 @@ export default class App extends React.Component {
   }
 }
 
-const root = document.getElementById('root');
-ReactDOM.render(<App />, root);
+ReactDOM.render(<App />, document.getElementById('root'));
