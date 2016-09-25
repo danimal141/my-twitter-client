@@ -14,6 +14,7 @@
     "babel-preset-react": "^6.11.1",
     "babel-register": "^6.14.0",
     "dotenv": "^2.0.0",
+    "photon": "git+https://github.com/connors/photon.git",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "twit": "^2.2.5"
