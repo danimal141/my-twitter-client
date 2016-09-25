@@ -22,4 +22,4 @@ export default class TimelineWindow {
 
     this.window.loadURL(`file://${__dirname}/../../html/main.html`);
   }
-};
+}
