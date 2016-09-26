@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import T from '../services/twitter';
 
 class Form extends React.Component {
   constructor(props) {
@@ -29,11 +30,19 @@ class Form extends React.Component {
   }
 
   handleTextChange(e) {
-    // TODO: Implement
+    e.preventDefault();
+    this.setState({ text: e.target.value });
   }
 
   handleSubmit(e) {
-    // TODO: Implement
+    e.preventDefault();
+    T.post('statuses/update', { status: this.state.text.trim() })
+      .catch(err => {
+        console.log(err.stack);
+      })
+      .then(result => {
+        this.setState({ text: '' });
+      });
   }
 }
 
