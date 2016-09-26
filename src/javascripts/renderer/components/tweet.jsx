@@ -14,7 +14,8 @@ export default class Tweet extends React.Component {
           src={status.user.profile_image_url_https}
           className='img-rounded media-object pull-left'
           width='32'
-          height='32'/>
+          height='32'
+        />
         <div className='media-body'>
           <strong className='media-body__user-name'>{status.user.name}</strong>
           <span className='media-body__user-screen-name'>@{status.user.screen_name}</span>
