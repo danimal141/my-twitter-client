@@ -25,6 +25,12 @@ export default class FormWindow {
       maximizable: false,
       width: 300,
       height: 250,
+      show: false
+    });
+
+    this.window.on('close', (e) => {
+      this.window.hide();
+      e.preventDefault();
     });
 
     this.window.loadURL(`file://${__dirname}/../../html/form.html`);
