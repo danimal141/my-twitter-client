@@ -7,10 +7,6 @@ export default class FormWindow {
   }
 
   start() {
-    app.on('window-all-closed', () => {
-      app.quit();
-    });
-
     app.on('ready', () => {
       this.createWindow();
     });
@@ -33,8 +29,10 @@ export default class FormWindow {
     });
 
     this.window.on('close', (e) => {
-      this.window.hide();
-      e.preventDefault();
+      if (this.window.isVisible()) {
+        this.window.hide();
+        e.preventDefault();
+      }
     });
 
     this.window.loadURL(`file://${__dirname}/../../html/form.html`);
