@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import T from '../services/twitter';
@@ -78,6 +79,7 @@ class App extends React.Component {
       body: tweet.text,
       icon: tweet.user.profile_image_url_https
     });
+    ipcRenderer.send('newMention');
   }
 }
 

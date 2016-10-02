@@ -1,14 +1,23 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 
 export default class TimelineWindow {
   constructor() {
     this.window = null;
+    this.newMentionsCount = 0;
     this.start();
   }
 
   start() {
     app.on('ready', () => {
       this.createWindow();
+    });
+
+    ipcMain.on('newMention', () => {
+      if (this.window.isFocused()) {
+        return;
+      }
+      this.newMentionsCount++;
+      this.updateBadge();
     });
   }
 
@@ -20,6 +29,19 @@ export default class TimelineWindow {
       height: 800
     });
 
+    this.window.on('focus', () => {
+      this.newMentionsCount = 0;
+      this.updateBadge();
+    });
+
     this.window.loadURL(`file://${__dirname}/../../html/main.html`);
+  }
+
+  updateBadge() {
+    app.setBadgeCount(this.newMentionsCount);
+
+    if (process.platform === 'darwin') {
+      app.dock.bounce();
+    }
   }
 }
