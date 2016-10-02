@@ -1,3 +1,4 @@
+import { remote } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import T from '../services/twitter';
@@ -36,13 +37,25 @@ class Form extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    T.post('statuses/update', { status: this.state.text.trim() })
-      .catch(err => {
-        console.log(err.stack);
-      })
-      .then(result => {
-        this.setState({ text: '' });
-      });
+    remote.dialog.showMessageBox({
+      type: 'question',
+      title: 'Confirmation',
+      message: 'Are you sure you want to tweet?',
+      buttons: ['Yes', 'No'],
+      defaultId: 0,
+      cancelId: 1
+    }, (idx) => {
+      if (idx === 1) {
+        return;
+      }
+      T.post('statuses/update', { status: this.state.text.trim() })
+        .catch(err => {
+          console.log(err.stack);
+        })
+        .then(result => {
+          this.setState({ text: '' });
+        });
+    });
   }
 }
 
