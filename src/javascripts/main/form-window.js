@@ -25,7 +25,7 @@ export default class FormWindow {
     this.window = new BrowserWindow({
       title: 'Tweet',
       center: true,
-      resizable: true,
+      resizable: false,
       minimizable: false,
       maximizable: false,
       width: 300,
