@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
 
 export default class FormWindow {
   constructor() {
@@ -9,10 +9,15 @@ export default class FormWindow {
   start() {
     app.on('ready', () => {
       this.createWindow();
+      this.registerGlobalShortcut();
     });
 
     app.on('showForm', () => {
       this.window.show();
+    });
+
+    app.on('will-quit', () => {
+      globalShortcut.unregisterAll();
     });
   }
 
@@ -30,11 +35,21 @@ export default class FormWindow {
 
     this.window.on('close', (e) => {
       if (this.window.isVisible()) {
-        this.window.hide();
         e.preventDefault();
+        this.window.hide();
       }
     });
 
     this.window.loadURL(`file://${__dirname}/../../html/form.html`);
+  }
+
+  registerGlobalShortcut() {
+    const accelerator = 'Cmd+Shift+N';
+    if (globalShortcut.isRegistered(accelerator)) {
+      return;
+    }
+    globalShortcut.register(accelerator, () => {
+      this.window.show();
+    });
   }
 }
