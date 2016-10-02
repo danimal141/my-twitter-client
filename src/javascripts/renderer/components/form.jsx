@@ -2,6 +2,7 @@ import { remote } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import T from '../services/twitter';
+import Draft from '../services/draft';
 
 class Form extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class Form extends React.Component {
               style={{ width: 300, height: 250 }}
               value={this.state.text}
               onChange={this.handleTextChange.bind(this)}
+              onBlur={this.handleBlur.bind(this)}
             />
           </div>
         </div>
@@ -30,9 +32,26 @@ class Form extends React.Component {
     );
   }
 
+  componentDidMount() {
+    Draft.read()
+      .catch(err => {
+        console.log(err.stack);
+      })
+      .then(text => {
+        this.setState({ text: text });
+      });
+  }
+
   handleTextChange(e) {
     e.preventDefault();
     this.setState({ text: e.target.value });
+  }
+
+  handleBlur() {
+    Draft.write(this.state.text)
+      .catch(err => {
+        console.log(err.stack);
+      });
   }
 
   handleSubmit(e) {
