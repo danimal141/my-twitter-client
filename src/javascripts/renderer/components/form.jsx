@@ -3,16 +3,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import T from '../services/twitter';
 import Draft from '../services/draft';
+import Screenshot from '../services/screenshot';
 
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: '' };
+    this.state = { text: '', nativeImage: null };
   }
 
   render() {
     return(
       <div className='window'>
+        <header className='toolbar toolbar-footer'>
+          <div className='toolbar-actions'>
+            <button
+              className='btn btn-default pull-right'
+              onClick={this.handleCapture.bind(this)}>
+              <span className='icon icon-monitor'></span>
+            </button>
+          </div>
+        </header>
         <div className='window-content'>
           <div>
             <textarea
@@ -25,6 +35,7 @@ class Form extends React.Component {
         </div>
         <footer className='toolbar toolbar-footer'>
           <div className='toolbar-actions'>
+            {this.state.nativeImage !== null ? <img className='img-rounded media-object pull-left' src={this.state.nativeImage.toDataURL()} width='32' height='32'/> : null }
             <button className='btn btn-primary pull-right' onClick={this.handleSubmit.bind(this)}>Tweet</button>
           </div>
         </footer>
@@ -54,6 +65,16 @@ class Form extends React.Component {
       });
   }
 
+  handleCapture() {
+    Screenshot.capture()
+      .catch(err => {
+        console.log(err.stack);
+      })
+      .then(nativeImage => {
+        this.setState({ nativeImage: nativeImage });
+      });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     remote.dialog.showMessageBox({
@@ -67,14 +88,43 @@ class Form extends React.Component {
       if (idx === 1) {
         return;
       }
-      T.post('statuses/update', { status: this.state.text.trim() })
-        .catch(err => {
-          console.log(err.stack);
-        })
-        .then(result => {
-          this.setState({ text: '' });
+      this.uploadMedia()
+        .then(mediaId => {
+          let params = { status: this.state.text.trim() };
+          if (mediaId) {
+            params.media_ids = [mediaId];
+          }
+          this.updateStatus(params);
         });
     });
+  }
+
+  uploadMedia() {
+    return new Promise((onFulfilled, onRejected) => {
+      if (this.state.nativeImage === null) {
+        onFulfilled();
+        return;
+      }
+      return T.post('media/upload', {
+        media_data: this.state.nativeImage.toPng().toString('base64')
+      })
+      .catch(err => {
+        console.log(err.stack);
+      })
+      .then(result => {
+        onFulfilled(result.data.media_id_string);
+      });
+    });
+  }
+
+  updateStatus(params) {
+    T.post('statuses/update', params)
+      .catch(err => {
+        console.log(err.stack);
+      })
+      .then(result => {
+        this.setState({ text: '', nativeImage: null });
+      });
   }
 }
 
